@@ -6,10 +6,9 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import service.GithubService
-import java.util.*
 
-class GithubFactory {
-    fun createGithubService(): GithubService {
+class GithubServiceFactory {
+    fun createDefaultGithubService(): GithubService {
         val httpClient = createHttpClient()
         val retrofit = createRetrofit(httpClient)
         return retrofit.create(GithubService::class.java)
