@@ -5,13 +5,13 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import model.AllReposResponse
+import model.ReposChunk
 import model.ProgrammingLanguage.JAVA
 import service.RepoService
 
 fun main() {
     val repoService = RepoService(GithubServiceFactory().createDefaultGithubService(), SearchQueryFactory())
-    val reposChannel: Channel<AllReposResponse> = Channel(UNLIMITED)
+    val reposChannel: Channel<ReposChunk> = Channel(UNLIMITED)
 
     runBlocking {
         DateRange.getAllDatesFromYearAgo().forEach {
