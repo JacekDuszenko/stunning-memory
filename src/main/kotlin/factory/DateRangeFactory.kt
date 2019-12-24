@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
-class DateRange {
+class DateRangeFactory {
     companion object {
         private const val dayInMs: Long = 1000 * 60 * 60 * 24
 

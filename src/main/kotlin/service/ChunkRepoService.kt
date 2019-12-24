@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface GithubService {
+interface ChunkRepoService {
     @GET("search/repositories")
     suspend fun getAllReposFromGivenDate(@Query("q") githubSearchQuery: String): Response<ReposChunk>
 }

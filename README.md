@@ -4,7 +4,7 @@ A command line program that lets you check out which Java class names are curren
 ##Running
 You can run your program within IntelliJ IDEA but you won't experience auto-refresh that happens when coroutine ends examining repository,
 because terminal window is cleared at that moment (unfortunately IntelliJ 'terminal' is not the real terminal and does not allow for clearing content).
-1. Build the jar with `./gradlew shadowJar`
+1. Build the fat jar with `./gradlew shadowJar`
 2. Go into `build/libs` directory
 3. Run file with `java -jar stunning-memory-0.0.1-all.jar`
 

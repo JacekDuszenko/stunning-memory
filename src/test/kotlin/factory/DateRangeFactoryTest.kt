@@ -5,7 +5,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import java.util.*
 
-class DateRangeTest {
+class DateRangeFactoryTest {
     companion object {
         private const val dayInMs: Long = 1000 * 60 * 60 * 24
     }
@@ -15,7 +15,7 @@ class DateRangeTest {
         val weekAgo = getDateSevenDaysAgo()
         val validLengthOfList = 7
 
-        assertThat(DateRange.getAllDatesUntilNow(weekAgo).size, CoreMatchers.equalTo(validLengthOfList))
+        assertThat(DateRangeFactory.getAllDatesUntilNow(weekAgo).size, CoreMatchers.equalTo(validLengthOfList))
     }
 
     private fun getDateSevenDaysAgo() = Date(System.currentTimeMillis() - 7 * dayInMs)
@@ -23,7 +23,7 @@ class DateRangeTest {
     @Test(expected = Exception::class)
     fun shouldThrowExceptionWhenInvalidDateRange() {
         val tomorrow = getMonthAfterNow()
-        DateRange.getAllDatesUntilNow(tomorrow)
+        DateRangeFactory.getAllDatesUntilNow(tomorrow)
     }
 
     private fun getMonthAfterNow() = Date(System.currentTimeMillis() + 31 *  dayInMs)
