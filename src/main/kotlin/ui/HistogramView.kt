@@ -31,6 +31,6 @@ class HistogramView(private val histogram: MutableMap<String, Long>) {
     }
 
     private fun getSortedListFromHistogram(): List<Map.Entry<String, Long>> {
-        return histogram.entries.toList().sortedByDescending { entry -> entry.value }
+        return histogram.entries.toList().sortedBy { entry -> entry.value }
     }
 }

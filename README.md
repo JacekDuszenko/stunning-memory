@@ -11,4 +11,5 @@ because terminal window is cleared at that moment (unfortunately IntelliJ 'termi
 ## Remarks
 Unfortunately github API allows only for 30 calls per minute. Due to this rate limiting, the program execution flow looks as if examined repository
 data was fetched in chunk of 30 calls. I decided not to implement delay on the coroutine level so substantial part of `/search/repository` github API 
-calls return code 403 as response (which is ignored).
+calls return code 403 as response (which is ignored). This happens because big amount of coroutines try to call a rest resource and after 30 times it blocks for a minute.
+I didn't find any way to bypass this github API limitation. 

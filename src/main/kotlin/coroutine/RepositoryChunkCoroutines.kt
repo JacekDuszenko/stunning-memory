@@ -11,12 +11,18 @@ import java.util.*
 
 fun CoroutineScope.fetchRepoMetadata(githubService: GithubService, reposChannel: Channel<ReposChunk>) {
     DateRangeFactory.getAllDatesFromYearAgo().forEach {
-        fetchReposFromGithub(githubService, it, reposChannel)
+        launch {
+            handleRateLimiting(githubService)
+            fetchReposFromGithub(githubService, it, reposChannel)
+        }
     }
 }
 
-
-private fun CoroutineScope.fetchReposFromGithub(githubService: GithubService, it: Date, reposChannel: Channel<ReposChunk>) {
+private fun CoroutineScope.fetchReposFromGithub(
+    githubService: GithubService,
+    it: Date,
+    reposChannel: Channel<ReposChunk>
+) {
     launch {
         val allReposFromDay = githubService.getAllLanguageReposCreatedOnGivenDay(it, ProgrammingLanguage.JAVA)
         reposChannel.send(allReposFromDay)

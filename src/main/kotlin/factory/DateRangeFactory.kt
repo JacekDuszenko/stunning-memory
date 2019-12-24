@@ -16,7 +16,7 @@ class DateRangeFactory {
             return getAllDatesUntilNow(yearAgo)
         }
 
-        private fun getYearAgoDate() = Date(System.currentTimeMillis() - 365 * 10 * dayInMs)
+        private fun getYearAgoDate() = Date(System.currentTimeMillis() - 365 * dayInMs)
 
         fun getAllDatesUntilNow(from: Date): List<Date> {
             val now = Date()

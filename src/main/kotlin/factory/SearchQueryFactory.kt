@@ -16,6 +16,6 @@ class SearchQueryFactory {
     }
 
     fun createClassesSearchQuery(programmingLanguage: ProgrammingLanguage, repositoryName: String): String {
-        return "class+in:file+language:${programmingLanguage.languageName}+repo:${repositoryName}+extension:${programmingLanguage.extension}"
+        return "class in:file language:${programmingLanguage.languageName} repo:${repositoryName} extension:${programmingLanguage.extension}"
     }
 }
