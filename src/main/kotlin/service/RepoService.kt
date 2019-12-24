@@ -10,6 +10,9 @@ class RepoService(private val githubService: GithubService, private val searchQu
     suspend fun getAllLanguageReposCreatedOnGivenDay(createdOn: Date, programmingLanguage: ProgrammingLanguage): ReposChunk {
         val searchQuery: String = searchQueryFactory.createGithubSearchQuery(createdOn, programmingLanguage)
         val response = githubService.getAllReposFromGivenDate(searchQuery)
+        if (! response.isSuccessful) {
+            println(response.code())
+        }
         return response.body() ?: emptyReposChunk()
     }
 
