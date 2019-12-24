@@ -1,33 +1,29 @@
 package ui
 
-import kotlinx.coroutines.*
+import model.GithubClass
+import model.GithubClasses
 
-class Histogram(private val histogram: MutableMap<String, Long>) {
+class HistogramView(private val histogram: MutableMap<String, Long>) {
     companion object {
         const val clearConsoleEscapeSequence: String = "\u001b[H\u001b[2J"
+        const val unitLongValue = 1L
     }
 
-    fun init(delayInMillis: Long) {
-        runBlocking {
-            refreshWithDelay(delayInMillis)
+    fun mergeToHistogram(githubClasses: GithubClasses) {
+        for (githubClass in githubClasses.items) {
+            mergeSingleNameToHistogram(githubClass)
         }
     }
 
-    private fun CoroutineScope.refreshWithDelay(delayInMillis: Long): Job {
-        return launch {
-            while (true) {
-                clearDisplay()
-                printHistogram()
-                delay(delayInMillis)
-            }
-        }
+    private fun mergeSingleNameToHistogram(githubClass: GithubClass) {
+        histogram.merge(githubClass.name, unitLongValue) { a: Long, b: Long -> a + b }
     }
 
-    private fun clearDisplay() {
+    fun clearDisplay() {
         print(clearConsoleEscapeSequence)
     }
 
-    private fun printHistogram() {
+    fun print() {
         val sortedByPopularity = getSortedListFromHistogram()
         for (entry in sortedByPopularity) {
             println("classname: ${entry.key}, occurrences: ${entry.value}")

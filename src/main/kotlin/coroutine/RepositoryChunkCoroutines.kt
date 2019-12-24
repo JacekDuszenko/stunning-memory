@@ -6,26 +6,19 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import model.ProgrammingLanguage
 import model.ReposChunk
-import service.RepoService
+import service.GithubService
 import java.util.*
 
-fun CoroutineScope.startFetchingReposFromGithub(
-    repoService: RepoService,
-    reposChannel: Channel<ReposChunk>
-) {
+fun CoroutineScope.fetchRepoMetadata(githubService: GithubService, reposChannel: Channel<ReposChunk>) {
     DateRangeFactory.getAllDatesFromYearAgo().forEach {
-        fetchReposFromGithub(repoService, it, reposChannel)
+        fetchReposFromGithub(githubService, it, reposChannel)
     }
 }
 
 
-private fun CoroutineScope.fetchReposFromGithub(
-    repoService: RepoService,
-    it: Date,
-    reposChannel: Channel<ReposChunk>
-) {
+private fun CoroutineScope.fetchReposFromGithub(githubService: GithubService, it: Date, reposChannel: Channel<ReposChunk>) {
     launch {
-        val allReposFromDay = repoService.getAllLanguageReposCreatedOnGivenDay(it, ProgrammingLanguage.JAVA)
+        val allReposFromDay = githubService.getAllLanguageReposCreatedOnGivenDay(it, ProgrammingLanguage.JAVA)
         reposChannel.send(allReposFromDay)
     }
 }

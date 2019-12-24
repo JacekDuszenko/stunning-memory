@@ -1,26 +1,31 @@
-import coroutine.startFetchingReposFromGithub
-import coroutine.startVisitingSpecificRepository
+import coroutine.display
+import coroutine.fetchRepoMetadata
+import coroutine.mergeToHistogram
+import coroutine.visitRepo
 import factory.GithubServiceFactory
-import factory.SearchQueryFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
 import kotlinx.coroutines.runBlocking
+import model.GithubClasses
 import model.ReposChunk
-import service.RepoService
-import ui.Histogram
+import service.GithubService
+import ui.HistogramView
 
 fun main() {
     val serviceFactory = GithubServiceFactory()
-    val repoService = RepoService(serviceFactory.createDefaultChunkRepoService(), serviceFactory.createDefaultClassesService(),SearchQueryFactory())
+    val repoService = serviceFactory.createDefaultRepoService()
     val reposChannel: Channel<ReposChunk> = Channel(UNLIMITED)
-    val histogram = Histogram(HashMap())
-    val refreshDelayInMillis = 2000L
+    val classesChannel: Channel<GithubClasses> = Channel(UNLIMITED)
+    val histogram = HistogramView(HashMap())
 
-    runBlocking(Dispatchers.Default) {
-        histogram.init(refreshDelayInMillis)
-        startFetchingReposFromGithub(repoService, reposChannel)
-        startVisitingSpecificRepository(repoService, reposChannel)
-    }
+    init(histogram, repoService, reposChannel, classesChannel)
 }
 
+private fun init(histogramView: HistogramView, repoService: GithubService, reposChannel: Channel<ReposChunk>, classesChannel: Channel<GithubClasses>) =
+    runBlocking(Dispatchers.Default) {
+        display(histogramView)
+        fetchRepoMetadata(repoService, reposChannel)
+        visitRepo(repoService, reposChannel, classesChannel)
+        mergeToHistogram(classesChannel, histogramView)
+    }

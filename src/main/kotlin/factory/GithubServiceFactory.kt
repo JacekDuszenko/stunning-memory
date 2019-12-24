@@ -7,15 +7,25 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import service.ChunkRepoService
 import service.ClassesService
+import service.GithubService
 
 class GithubServiceFactory {
-    fun createDefaultChunkRepoService(): ChunkRepoService {
+
+    fun createDefaultRepoService(): GithubService {
+        return GithubService(
+            createDefaultChunkRepoService(),
+            createDefaultClassesService(),
+            SearchQueryFactory()
+        )
+    }
+
+    private fun createDefaultChunkRepoService(): ChunkRepoService {
         val httpClient = createHttpClient()
         val retrofit = createRetrofit(httpClient)
         return retrofit.create(ChunkRepoService::class.java)
     }
 
-    fun createDefaultClassesService(): ClassesService {
+    private fun createDefaultClassesService(): ClassesService {
         val httpClient = createHttpClient()
         val retrofit = createRetrofit(httpClient)
         return retrofit.create(ClassesService::class.java)
@@ -34,6 +44,4 @@ class GithubServiceFactory {
         return OkHttpClient.Builder()
             .build()
     }
-
-
 }
